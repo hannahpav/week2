@@ -3,47 +3,30 @@ corr <- function(directory, threshold = 0) {
       ##Read Files in ID
       
       files332 <- list.files(directory)
-     # readfiles <- lapply(file.path(directory, files332), read.csv)
+     
+      corr_plan <- NULL # create empty vector
       
-      files_run <- NULL
-      corr_plan <- NULL
+      source("complete.R") # call on the code from before
       
-      source("complete.R")
-      
-      complete_ind <- complete(directory)
+      complete_ind <- complete(directory) #get all the complete values
+      # create a data.frame that only uses those values above the threshold
       complete_thr <- complete_ind[complete_ind$nobs>=threshold,]
       
       for(i in complete_thr$id) {
-            
+            #read in the files based on what's above the threshold
             readfiles <- lapply(file.path(directory, files332[i]), read.csv)
             
-            dftemp <- readfiles[[1]]
+            dftemp <- readfiles[[1]] #dataframe for only one at a time
             
-            whole_sulfate <- dftemp[["sulfate"]]
-            real_sulfate <- whole_sulfate[!is.na(whole_sulfate)]
+            dftemp_clean <- na.omit(dftemp) #get rid of all NA rows
             
-            whole_nitrate <- dftemp[["nitrate"]]
-            real_nitrate <- whole_nitrate[!is.na(whole_nitrate)]
+            sulfate <- dftemp_clean[["sulfate"]] #extract sulfate
+            nitrate <- dftemp_clean[["nitrate"]] # extract nitrate
             
-            corr_each <- cor(real_sulfate, real_nitrate)
-            corr_plan <- c(corr_plan, corr_each)
+            corr_each <- cor(sulfate, nitrate) #correlate
+            corr_plan <- c(corr_plan, corr_each) #add all these to a vector
                  }
-      
-     # files_run}
-#       
-#       for(j in (files_run)) {
-#             dftemp <- readfiles[[j]]
-#            
-#             whole_sulfate <- dftemp[["sulfate"]]
-#             real_sulfate <- whole_sulfate[!is.na(whole_sulfate)]
-#             
-#             whole_nitrate <- dftemp[["nitrate"]]
-#             real_nitrate <- whole_nitrate[!is.na(whole_nitrate)]
-#             
-#             corr_each <- cor(real_sulfate, real_nitrate)
-#             corr_plan <- c(corr_plan, corr_each)
-#       }
-#       
+
       corr_plan
 
 }
