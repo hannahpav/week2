@@ -26,7 +26,7 @@ corr <- function(directory, threshold = 0) {
             corr_plan <- c(corr_plan, corr_each)
       }
       
-      coor_plan
+      corr_plan
       
 }
 
