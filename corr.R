@@ -18,15 +18,21 @@ corr <- function(directory, threshold = 0) {
                  files_run <- c(files_run, i)}
                  }
       
-      #print(files_run)
+     # files_run}
       
-      for(i in (files_run)) {
-            dftemp <- readfiles[[i]]
-            corr_each <- cor(dftemp["sulfate"], dftemp["nitrate"])
+      for(j in (files_run)) {
+            dftemp <- readfiles[[j]]
+           
+            whole_sulfate <- dftemp[["sulfate"]]
+            real_sulfate <- whole_sulfate[!is.na(whole_sulfate)]
+            
+            whole_nitrate <- dftemp[["nitrate"]]
+            real_nitrate <- whole_nitrate[!is.na(whole_nitrate)]
+            
+            corr_each <- cor(real_sulfate, real_nitrate)
             corr_plan <- c(corr_plan, corr_each)
       }
       
       corr_plan
       
 }
-
